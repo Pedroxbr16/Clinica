@@ -4,11 +4,11 @@
 - Versão do Workbench(SQL): 8.0.38
 
 
-# Instalção
+# Instalação
 
-:::info
-Para evitar conflitos siga esse passo a passo
-:::
+
+## Para evitar conflitos siga esse passo a passo
+
 
 - Escolha a opção "Custom" na tela de seleção de tipo de instalação.
 - Desmarque a instalação do MySQL Server, já que o XAMPP já inclui um servidor MySQL.
