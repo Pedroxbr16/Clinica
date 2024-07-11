@@ -81,6 +81,9 @@ $result = $conexao->query($sql);
 </head>
 <body>
     <div class="container">
+    <div class="text-right">
+            <a href="../login.php" class="btn btn-primary">Deslogar</a>
+        </div>
         <h2>Pacientes Cadastrados</h2>
         <form class="search-bar" method="get" action="">
             <input type="text" name="search" id="searchInput" class="form-control" placeholder="Buscar paciente...">
