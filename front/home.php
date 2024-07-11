@@ -3,9 +3,7 @@ session_start();
 
 if (isset($_SESSION['mensagem'])) {
     $mensagem = $_SESSION['mensagem'];
-    echo "<script>
-        alert('$mensagem');
-    </script>";
+    echo "<script>alert('$mensagem');</script>";
     unset($_SESSION['mensagem']);
 }
 
@@ -99,7 +97,7 @@ $result = $conexao->query($sql);
             <tbody>
                 <?php if ($result->num_rows > 0): ?>
                     <?php while($row = $result->fetch_assoc()): ?>
-                        <tr onclick="location.href='/medico/config/editar.php?id=<?php echo $row['id']; ?>'">
+                        <tr onclick="location.href='../config/editar.php?id=<?php echo $row['id']; ?>'">
                             <td><?php echo $row['nome']; ?></td>
                             <td><?php echo $row['cpf']; ?></td>
                             <td><?php echo $row['email']; ?></td>
