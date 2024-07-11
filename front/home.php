@@ -39,56 +39,71 @@ $result = $conexao->query($sql);
 
 <!DOCTYPE html>
 <html lang="pt-br">
+
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Pacientes Cadastrados</title>
     <link href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css" rel="stylesheet">
     <style>
-        body {
-            background-color: #f0f2f5;
-            font-family: 'Arial', sans-serif;
-            padding: 20px;
-        }
-        .container {
-            background-color: #fff;
-            border-radius: 10px;
-            box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
-            padding: 30px;
-        }
-        h2 {
-            text-align: center;
-            margin-bottom: 20px;
-            color: #007bff;
-        }
-        .table {
-            margin-top: 20px;
-            cursor: pointer;
-        }
-        .table tbody tr:hover {
-            background-color: #f1f1f1;
-        }
-        .search-bar {
-            margin-bottom: 20px;
-        }
-        .btn {
-            margin-bottom: 20px;
-        }
-        .pagination {
-            justify-content: center;
-        }
+    body {
+        background-color: #f0f2f5;
+        font-family: 'Arial', sans-serif;
+        padding: 20px;
+    }
+
+    .container {
+        background-color: #fff;
+        border-radius: 10px;
+        box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+        padding: 30px;
+    }
+
+    h2 {
+        text-align: center;
+        margin-bottom: 20px;
+        color: #007bff;
+    }
+
+    .table {
+        margin-top: 20px;
+        cursor: pointer;
+    }
+
+    .table tbody tr:hover {
+        background-color: #f1f1f1;
+    }
+
+    .search-bar {
+        margin-bottom: 20px;
+    }
+
+    .btn {
+        margin-bottom: 20px;
+    }
+
+    .pagination {
+        justify-content: center;
+    }
+
+    .btn-red {
+        background-color: red;
+        border-color: red;
+        color: white;
+    }
     </style>
 </head>
+
 <body>
     <div class="container">
-    <div class="text-right">
-            <a href="../login.php" class="btn btn-primary">Deslogar</a>
+        <div class="text-right">
+            <a href="../login.php" class="btn btn-red">Deslogar</a>
         </div>
         <h2>Pacientes Cadastrados</h2>
         <form class="search-bar" method="get" action="">
             <input type="text" name="search" id="searchInput" class="form-control" placeholder="Buscar paciente...">
         </form>
-        
+
         <table class="table table-bordered" id="patientsTable">
             <thead>
                 <tr>
@@ -99,17 +114,17 @@ $result = $conexao->query($sql);
             </thead>
             <tbody>
                 <?php if ($result->num_rows > 0): ?>
-                    <?php while($row = $result->fetch_assoc()): ?>
-                        <tr onclick="location.href='../config/editar.php?id=<?php echo $row['id']; ?>'">
-                            <td><?php echo $row['nome']; ?></td>
-                            <td><?php echo $row['cpf']; ?></td>
-                            <td><?php echo $row['email']; ?></td>
-                        </tr>
-                    <?php endwhile; ?>
+                <?php while($row = $result->fetch_assoc()): ?>
+                <tr onclick="location.href='../config/editar.php?id=<?php echo $row['id']; ?>'">
+                    <td><?php echo $row['nome']; ?></td>
+                    <td><?php echo $row['cpf']; ?></td>
+                    <td><?php echo $row['email']; ?></td>
+                </tr>
+                <?php endwhile; ?>
                 <?php else: ?>
-                    <tr>
-                        <td colspan="3" class="text-center">Nenhum paciente cadastrado</td>
-                    </tr>
+                <tr>
+                    <td colspan="3" class="text-center">Nenhum paciente cadastrado</td>
+                </tr>
                 <?php endif; ?>
             </tbody>
         </table>
@@ -156,45 +171,49 @@ $result = $conexao->query($sql);
     <script src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.5.4/dist/umd/popper.min.js"></script>
     <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.min.js"></script>
     <script>
-        $(document).ready(function() {
-            $('#searchInput').on('keyup', function() {
-                var searchValue = $(this).val().toLowerCase();
-                var rows = $('#patientsTable tbody tr');
+    $(document).ready(function() {
+        $('#searchInput').on('keyup', function() {
+            var searchValue = $(this).val().toLowerCase();
+            var rows = $('#patientsTable tbody tr');
 
-                rows.each(function() {
-                    var name = $(this).find('td:eq(0)').text().toLowerCase();
-                    var cpf = $(this).find('td:eq(1)').text().toLowerCase();
-                    var email = $(this).find('td:eq(2)').text().toLowerCase();
+            rows.each(function() {
+                var name = $(this).find('td:eq(0)').text().toLowerCase();
+                var cpf = $(this).find('td:eq(1)').text().toLowerCase();
+                var email = $(this).find('td:eq(2)').text().toLowerCase();
 
-                    if (name.includes(searchValue) || cpf.includes(searchValue) || email.includes(searchValue)) {
-                        $(this).show();
-                    } else {
-                        $(this).hide();
-                    }
-                });
+                if (name.includes(searchValue) || cpf.includes(searchValue) || email.includes(
+                        searchValue)) {
+                    $(this).show();
+                } else {
+                    $(this).hide();
+                }
             });
         });
+    });
     </script>
-      <script>
-        $(document).ready(function() {
-            function loadPacientes(query = '') {
-                $.ajax({
-                    url: 'buscar_pacientes.php',
-                    method: 'GET',
-                    data: { query: query },
-                    success: function(response) {
-                        $('#pacientesTableBody').html(response);
-                    }
-                });
-            }
-
-            loadPacientes();
-
-            $('#search').on('input', function() {
-                const query = $(this).val();
-                loadPacientes(query);
+    <script>
+    $(document).ready(function() {
+        function loadPacientes(query = '') {
+            $.ajax({
+                url: 'buscar_pacientes.php',
+                method: 'GET',
+                data: {
+                    query: query
+                },
+                success: function(response) {
+                    $('#pacientesTableBody').html(response);
+                }
             });
+        }
+
+        loadPacientes();
+
+        $('#search').on('input', function() {
+            const query = $(this).val();
+            loadPacientes(query);
         });
+    });
     </script>
 </body>
+
 </html>
