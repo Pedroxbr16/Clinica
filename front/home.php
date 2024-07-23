@@ -29,7 +29,7 @@ if (isset($_GET['search']) && !empty($_GET['search'])) {
 // Obter total de registros para paginação
 $sql_total = "SELECT COUNT(*) as total FROM pacientes $filtro";
 $result_total = $conexao->query($sql_total);
-$total_registros = $result_total->fetch_assoc()['total'];
+$total_registros = $result_total ? $result_total->fetch_assoc()['total'] : 0;
 $total_paginas = ceil($total_registros / $registros_por_pagina);
 
 // Obter registros da página atual
@@ -47,7 +47,7 @@ $result = $conexao->query($sql);
     <link href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css" rel="stylesheet">
     <style>
     body {
-        background-color: #f0f2f5;
+        background-color: #BEDCFE;
         font-family: 'Arial', sans-serif;
         padding: 20px;
     }
@@ -112,8 +112,8 @@ $result = $conexao->query($sql);
                     <th>E-mail</th>
                 </tr>
             </thead>
-            <tbody>
-                <?php if ($result->num_rows > 0): ?>
+            <tbody id="pacientesTableBody">
+                <?php if ($result && $result->num_rows > 0): ?>
                 <?php while($row = $result->fetch_assoc()): ?>
                 <tr onclick="location.href='../config/editar.php?id=<?php echo $row['id']; ?>'">
                     <td><?php echo $row['nome']; ?></td>
@@ -131,7 +131,7 @@ $result = $conexao->query($sql);
 
         <!-- Paginação -->
         <nav>
-            <ul class="pagination justify-content-center">
+            <ul class="pagination justify-content-center" id="pagination">
                 <?php
                 // Limite de páginas visíveis na paginação
                 $limite_paginas = 10;
@@ -172,45 +172,38 @@ $result = $conexao->query($sql);
     <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.min.js"></script>
     <script>
     $(document).ready(function() {
-        $('#searchInput').on('keyup', function() {
-            var searchValue = $(this).val().toLowerCase();
-            var rows = $('#patientsTable tbody tr');
+        let timeout = null;
 
-            rows.each(function() {
-                var name = $(this).find('td:eq(0)').text().toLowerCase();
-                var cpf = $(this).find('td:eq(1)').text().toLowerCase();
-                var email = $(this).find('td:eq(2)').text().toLowerCase();
-
-                if (name.includes(searchValue) || cpf.includes(searchValue) || email.includes(
-                        searchValue)) {
-                    $(this).show();
-                } else {
-                    $(this).hide();
-                }
-            });
-        });
-    });
-    </script>
-    <script>
-    $(document).ready(function() {
-        function loadPacientes(query = '') {
+        function loadPacientes(query = '', pagina = 1) {
             $.ajax({
-                url: 'buscar_pacientes.php',
+                url: '../config/buscar.php',
                 method: 'GET',
                 data: {
-                    query: query
+                    query: query,
+                    pagina: pagina
                 },
+                dataType: 'json',
                 success: function(response) {
-                    $('#pacientesTableBody').html(response);
+                    $('#pacientesTableBody').html(response.tabela);
+                    $('#pagination').html(response.paginacao);
                 }
             });
         }
 
-        loadPacientes();
-
-        $('#search').on('input', function() {
+        $('#searchInput').on('input', function() {
+            clearTimeout(timeout);
             const query = $(this).val();
-            loadPacientes(query);
+            timeout = setTimeout(function() {
+                loadPacientes(query, 1); // Resetar para a página 1 ao buscar
+            }, 500); // Esperar 500ms antes de executar a busca
+        });
+
+        // Para lidar com paginação clicável sem recarregar a página
+        $(document).on('click', '.pagination a', function(e) {
+            e.preventDefault();
+            const query = $('#searchInput').val();
+            const pagina = $(this).attr('data-page');
+            loadPacientes(query, pagina);
         });
     });
     </script>

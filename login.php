@@ -58,7 +58,7 @@ if(isset($_POST['submit-entrar'])):
         height: 100vh;
         margin: 0;
         font-family: 'Arial', sans-serif;
-         /* background-image: url('clean_login_background_1920x1080.png'); */
+        background-image: url('css/imagens/fundo_login.png');
     }
     h2 {
         color: black;
@@ -77,14 +77,12 @@ if(isset($_POST['submit-entrar'])):
         width: 100%;
     }
 
-    .login-container h2 {
-        text-align: center;
-        margin-bottom: 20px;
-        color: #007bff;
-    }
+
 
     .login-container .form-group label {
         font-weight: bold;
+        color: 	#696969;
+
     }
 
     .btn-primary {
@@ -140,7 +138,7 @@ if(isset($_POST['submit-entrar'])):
 </head>
 
 <body>
-<h2>Login</h2>
+<h2>Bem Vindo <br> Faça seu login</h2>
     <div class="login-container">
       
         <form method="POST">
