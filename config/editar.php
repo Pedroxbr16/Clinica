@@ -247,11 +247,12 @@ $resulthistoricos = $conexao->query($sqlhistoricos);
                         </div>
                         <div class="form-group col-md-4">
                             <label for="foto">Foto</label>
-                            <img id="photoPreview" class="photo-preview" src="uploads/<?php echo $foto; ?>" alt="Preview da Foto" style="<?php echo empty($foto) ? 'display: none;' : ''; ?>">
                             <div class="custom-file">
                                 <input type="file" class="custom-file-input" id="foto" name="foto" accept="image/*" capture="camera" onchange="previewPhoto(event)">
-                                <label class="custom-file-label" for="foto"></label>
+                                <label class="custom-file-label" for="foto">Escolher arquivo</label>
                             </div>
+                            <img id="photoPreview" class="photo-preview" src="#" alt="Preview da Foto" style="display: none;">
+                        </div>
                         </div>
                     </div>
                     <div class="form-row">
